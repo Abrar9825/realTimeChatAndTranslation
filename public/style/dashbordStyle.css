@@ -1,0 +1,80 @@
+/* Import Google font - Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  width: 100%;
+  background: #009579;
+  font-family: Arial, sans-serif; /* Override Poppins for Arial */
+}
+
+#chat-container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #fff; /* Added background for better visibility */
+  border-radius: 7px; /* Added border-radius for styling */
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3); /* Added box-shadow for styling */
+  padding: 2rem; /* Added padding for inner spacing */
+}
+
+#messages {
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: 300px;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  background: #f1f0f0; /* Added background for better visibility */
+  border-radius: 7px; /* Added border-radius for styling */
+}
+
+.message {
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 10px;
+  max-width: 70%;
+}
+
+.message.sender {
+  align-self: flex-end;
+  background-color: #dcf8c6;
+}
+
+.message.receiver {
+  align-self: flex-start;
+  background-color: gray;
+  color: white;
+}
+
+#input-container {
+  display: flex;
+  margin-top: 10px;
+}
+
+#message {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
+#sendBtn {
+  padding: 10px 20px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+#sendBtn:hover {
+  background-color: #0056b3;
+}

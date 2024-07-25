@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat APP</title>
+    <link rel="stylesheet" href="/style/dashbordStyle.css">
+</head>
+
+<body>
+    <div id="chat-container">
+        <h1>Chatting</h1>
+        <div id="messages"></div>
+        <div id="input-container">
+            <input type="text" id="message" placeholder="Enter Message" />
+            <button id="sendBtn">Send</button>
+        </div>
+        <h3>Welcome : <%= userName %></h3>
+        <h3>user language : <%= userLanguage %></h3>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const sendBtn = document.getElementById("sendBtn");
+        const messageInput = document.getElementById("message");
+        const allMessages = document.getElementById("messages");
+        const userLanguage = '<%= userLanguage %>';
+        const userName = '<%= userName %>';
+
+        function appendMessage(message, sender, username) {
+            const p = document.createElement("div");
+            p.innerHTML = `<strong>${username}:</strong> <br> ${message}`;
+            p.classList.add('message');
+            p.classList.add(sender ? 'sender' : 'receiver');
+            allMessages.appendChild(p);
+            allMessages.scrollTop = allMessages.scrollHeight; // Scroll to the bottom
+        }
+
+        socket.on("message", async ({ message, fromLang, senderSocketId, username }) => {
+            // Avoid appending the message twice on the sender's side
+            if (socket.id !== senderSocketId) {
+                // Translate the message to the user's language
+                let toLang = userLanguage;
+                if (fromLang === toLang) {
+                    appendMessage(message, false, username);
+                } else {
+                    let LINK = `https://api.mymemory.translated.net/get?q=${message}!&langpair=${fromLang}|${toLang}`;
+
+                    try {
+                        let response = await fetch(LINK);
+                        let data = await response.json();
+                        let translatedMessage = data.responseData.translatedText;
+                        appendMessage(translatedMessage, false, username);
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                }
+            }
+        });
+
+        sendBtn.addEventListener("click", (e) => {
+            const message = messageInput.value;
+            appendMessage(message, true, userName); // Display the original message for the sender with username
+            socket.emit("user-message", {
+                message: message,
+                fromLang: userLanguage,
+                senderSocketId: socket.id, // Send the sender's socket ID
+                username: userName // Send the username
+            });
+            messageInput.value = ''; // Clear input field after sending
+        });
+    </script>
+</body>
+
+</html>

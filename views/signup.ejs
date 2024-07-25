@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="/style/loginSignup.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="login form">
+            <header>Registration</header>
+            <form action="/signup" method="POST">
+                <input type="text" id="username" name="username" placeholder="Enter your email" required>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <select id="language" name="language" required>
+                    <!-- Add more options as needed -->
+                </select>
+                <button type="submit">Signup</button>
+            </form>
+            <div class="signup">
+                <span class="signup">Already have an account?
+                 <a href="/"><label for="check">Login</label></a>
+                </span>
+              </div>
+        </div>
+    
+    </div>
+
+</body>
+
+<script src="/language.js"></script>
+<script>
+    const langoption = document.querySelectorAll('select');
+    langoption.forEach((selectElement, index) => {
+        for (let code in language) {
+            let selected = '';
+            if (index === 0 && code === "en-GB") {
+                selected = "selected";
+            }
+            let option = `<option value="${code}" ${selected}>${language[code]}</option>`;
+            console.log(option);
+            selectElement.insertAdjacentHTML('beforeend', option);
+        }
+    });
+</script>
+
+</html>
