@@ -4,13 +4,15 @@ const http = require('http');
 const socketIO = require('socket.io');
 const { connectToMongodb } = require('./config');
 const userRoutes = require('./routes/userRoutes');
+require('dotenv').config(); // Load environment variables from .env file
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
-// Connect to MongoDB
-connectToMongodb('mongodb://localhost:27017/chatapp');
+// Connect to MongoDB using the environment variable
+const MONGO_URI = process.env.MONGO_URI;
+connectToMongodb(MONGO_URI);
 
 // Socket.io
 io.on('connection', (socket) => {
@@ -44,7 +46,7 @@ app.get('/dashboard', (req, res) => {
 app.use('/', userRoutes);
 
 // Listening
-const PORT = 8000;
+const PORT = process.env.PORT || 8001;
 server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
